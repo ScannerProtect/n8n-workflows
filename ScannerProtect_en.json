@@ -1,0 +1,161 @@
+{
+  "name": "ScannerProtect en",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        0
+      ],
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $json.from }}",
+        "toEmail": "={{ $json.to }}",
+        "subject": "Dein NFC-Tag wurde gescannt!",
+        "html": "=An attacker scanned your NFC tag.<br>\n<br>\nHere are some information about the attacker:<br>\n<br>\nIP Address:<br> {{ $json.headers[\"cf-connecting-ip\"] }} <br>\n<br>\nCountry:<br> {{ $json.headers[\"cf-ipcountry\"] }} <br>\n<br>\nBrowser:<br>{{ $json.headers[\"user-agent\"] }}<br>\n<br>\nPreferred Languages:<br>{{ $json.headers[\"accept-language\"] }}<br>\n<br>\nPlatform:<br>{{ $json.headers[\"sec-ch-ua-platform\"] }}<br>\n<br>\nMobile Device:<br>{{ $json.headers[\"sec-ch-ua-mobile\"] === \"?1\" ? \"Yes\" : \"No\" }}<br>\n<br>\nCloudflare Ray ID:<br>{{ $json.headers[\"cf-ray\"] }}<br>\n<br>\nTime: {{ $now }}<br>\n<br>\nThis mail was automatically sent by nwawsoft's ScannerProtect.<br>\n<br>\n<a href=\"https://scannerprotect.de\">https://scannerprotect.de</a><br>\n<a href=\"https://nwawsoft.com\">https://nwawsoft.com</a>",
+        "options": {
+          "appendAttribution": false,
+          "bccEmail": "={{ $json.bcc }}"
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        340,
+        0
+      ],
+      "name": "Send Email"
+    },
+    {
+      "parameters": {
+        "content": "## Entry Point\nThe **attacker** triggers the workflow by navigating to the **victim's** **bait URL**.",
+        "height": 120,
+        "width": 210,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        -160
+      ],
+      "id": "e6e6248c-0df2-4774-b284-685a6283d117",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Payload\nAn **email** is sent to the **victim's email address** which **contains information about the attacker**.",
+        "width": 210
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        340,
+        -200
+      ],
+      "id": "a3ab0470-48e3-4c3b-ac1a-1d0e591a40a8",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Variablen:\n### from:\n\n### to:\n\n### bcc:\n",
+        "height": 220,
+        "width": 210,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        120,
+        -260
+      ],
+      "id": "d8b2783a-015f-416b-b300-933dc3b131ec",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e756134a-ec06-4d75-9764-fc685c85b28d",
+              "name": "from",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "ccfec093-1da5-4212-891e-f9126d4000a9",
+              "name": "to",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "beb81bcc-b4fc-4ade-92ee-ac6fffbf5a7c",
+              "name": "bcc",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        120,
+        0
+      ],
+      "id": "87a2abf6-04aa-4169-9fef-f04e362ede74",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6235a8a2-9ce5-410b-9c85-46eff57f5557",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "86ada524216ae9b055944ba187ae9b1ac4d641e968bb1751921f6616018acbb4"
+  },
+  "id": "g4SZnQKl2KxSzoRl",
+  "tags": [
+    {
+      "createdAt": "2025-05-28T07:18:34.233Z",
+      "updatedAt": "2025-05-28T07:18:34.233Z",
+      "id": "4Ooi11DDjDP3VQel",
+      "name": "NFC"
+    }
+  ]
+}
